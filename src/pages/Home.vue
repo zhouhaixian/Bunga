@@ -9,10 +9,14 @@ const isTranslating = ref(false);
 function translateContext(event: Event) {
   isTranslating.value = true;
   result.value = "";
-  axios.post("/api/translate", { context: context.value }).then((res) => {
-    result.value = res.data;
-    isTranslating.value = false;
-  });
+  axios
+    .post("/api/translate", { context: context.value })
+    .then((res) => {
+      result.value = res.data;
+    }, reason => {
+      result.value = reason
+    })
+    .finally(() => (isTranslating.value = false));
   event.preventDefault();
 }
 
@@ -39,7 +43,11 @@ function resetContext() {
     <div class="container mt-3">
       <div class="row">
         <button type="submit" class="btn btn-primary col me-3">提交</button>
-        <button @click="resetContext" type="button" class="btn btn-secondary col">
+        <button
+          @click="resetContext"
+          type="button"
+          class="btn btn-secondary col"
+        >
           重置
         </button>
       </div>
