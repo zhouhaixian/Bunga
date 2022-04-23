@@ -2,6 +2,7 @@
   "name": "bunga",
   "private": true,
   "version": "1.0.0",
+  "license": "GPL-3.0",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
