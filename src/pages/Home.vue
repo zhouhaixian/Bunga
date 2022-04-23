@@ -10,7 +10,7 @@ function translateContext(event: Event) {
   isTranslating.value = true;
   result.value = "";
   axios
-    .post("/api/translate", { context: context.value })
+    .post("https://webapi.onrender.com/translate", { context: context.value })
     .then((res) => {
       result.value = res.data;
     }, reason => {
