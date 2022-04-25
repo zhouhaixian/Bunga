@@ -7,21 +7,33 @@ const result = ref("");
 const isTranslating = ref(false);
 
 function translateContext(event: Event) {
-  isTranslating.value = true;
-  result.value = "";
-  axios
-    .post("https://webapi.onrender.com/translate", { context: context.value })
-    .then((res) => {
-      result.value = res.data;
-    }, reason => {
-      result.value = reason
-    })
-    .finally(() => (isTranslating.value = false));
+  if (context.value.length > 10000) {
+    result.value = "字数超出限制";
+  } else {
+    const api = import.meta.env.PROD
+      ? "https://webapi.onrender.com/translate"
+      : "http://localhost:3001/translate";
+    isTranslating.value = true;
+    result.value = "";
+    axios
+      .post(api, { context: context.value })
+      .then(
+        (res) => {
+          result.value = res.data;
+        },
+        (reason) => {
+          result.value = reason;
+        }
+      )
+      .finally(() => (isTranslating.value = false));
+  }
+
   event.preventDefault();
 }
 
-function resetContext() {
+function reset() {
   context.value = "";
+  result.value = "";
 }
 </script>
 
@@ -33,7 +45,7 @@ function resetContext() {
     </div>
   </header>
   <form class="container py-4" @submit="translateContext">
-    <label class="form-label fs-3 text-secondary">需要翻译的内容:</label>
+    <label class="form-label fs-3 text-secondary">原文:</label>
     <textarea
       v-model="context"
       class="form-control text-muted fs-4"
@@ -42,12 +54,14 @@ function resetContext() {
     ></textarea>
     <div class="container mt-3">
       <div class="row">
-        <button type="submit" class="btn btn-primary col me-3">提交</button>
         <button
-          @click="resetContext"
-          type="button"
-          class="btn btn-secondary col"
+          type="submit"
+          class="btn btn-primary col me-3"
+          :disabled="isTranslating"
         >
+          提交
+        </button>
+        <button @click="reset" type="button" class="btn btn-secondary col">
           重置
         </button>
       </div>
