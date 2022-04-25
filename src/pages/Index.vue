@@ -41,7 +41,7 @@ function reset() {
   <header class="text-center bg-light shadow-sm">
     <div class="container pt-4 pb-2">
       <h1 class="text-primary">Bunga</h1>
-      <p class="lead text-secondary">使文本变得无厘头</p>
+      <p class="lead text-secondary">给文本换种表达方式</p>
     </div>
   </header>
   <form class="container py-4" @submit="translateContext">
