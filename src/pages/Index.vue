@@ -10,9 +10,7 @@ function translateContext(event: Event) {
   if (context.value.length > 10000) {
     result.value = "字数超出限制";
   } else {
-    const api = import.meta.env.PROD
-      ? "https://webapi.onrender.com/translate"
-      : "http://localhost:3001/translate";
+    const api = "/api/translate"
     isTranslating.value = true;
     result.value = "";
     axios
